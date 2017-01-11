@@ -30,7 +30,7 @@ module.exports = function (xml) {
 			});
 
 			// Write the config file
-			self = this;
+			var self = this;
 		    config.write()
             .then(function() {
     			// Pipe the file to the next step
