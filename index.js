@@ -16,9 +16,6 @@ var Config = require('cordova-config');
 // export the module
 module.exports = function (xml) {
 	return through.obj(function (file, enc, cb) {
-		// Pipe the file to the next step
-		this.push(file);
-
 		// Make sure it is an array so we can iterate
 		xml = [].concat(xml);
 
@@ -33,10 +30,13 @@ module.exports = function (xml) {
 			});
 
 			// Write the config file
-			config.write(function () {
-				// Call the callback
-				cb();
-			});
+			self = this;
+		    config.write()
+            .then(function() {
+    			// Pipe the file to the next step
+                self.push(file);
+                cb();
+            });
 		} catch (err) {
 			// Return an error if something went wrong while parsing
 			cb(new gutil.PluginError('gulp-cordova-xml', err.message));
